@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.sqllite.MainActivity;
 import com.example.sqllite.R;
 import com.example.sqllite.model.NotesModel;
 
@@ -15,12 +17,12 @@ import java.util.List;
 
 public class NotesAdapter extends BaseAdapter {
     // Khai báo biến toàn cục
-    private Context context;
+    private MainActivity context;
     private int layout;
     private List<NotesModel> noteList;
 
     // Tạo constructor
-    public NotesAdapter(Context context, int layout, List<NotesModel> noteList) {
+    public NotesAdapter(MainActivity context, int layout, List<NotesModel> noteList) {
         this.context = context;
         this.layout = layout;
         this.noteList = noteList;
@@ -40,6 +42,7 @@ public class NotesAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
+
 
     // Tạo ViewHolder
     private class ViewHolder {
@@ -68,7 +71,27 @@ public class NotesAdapter extends BaseAdapter {
         NotesModel notes = noteList.get(position);
         viewHolder.textViewNote.setText(notes.getNameNote());
 
+        // Bắt sự kiện nút cập nhật
+        viewHolder.imageViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Cập nhật " + notes.getNameNote(), Toast.LENGTH_SHORT).show();
+
+                // Gọi Dialog trong MainActivity.java
+                context.DialogCapNhatNotes(notes.getNameNote(), notes.getIdNote());
+            }
+        });
+
+        viewHolder.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.DialogDelete(notes.getNameNote(), notes.getIdNote());
+            }
+        });
+
         return convertView;
     }
+
+
 
 }
